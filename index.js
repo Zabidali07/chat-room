@@ -10,7 +10,7 @@ const path = require("path");
 require("dotenv").config();
 const { DATABASE_URL, NODE_PORT, NODE_ENV } = process.env;
 
-const PORT = NODE_PORT || 8000;
+const PORT = process.env.PORT || NODE_PORT || 8000;
 
 app.use(bodyParser.json());
 app.use(
@@ -43,7 +43,7 @@ mongoose
   })
   .catch((err) => console.log(`DB connection failed ${err}`));
 
-const server = app.listen(8000, () => {
+const server = app.listen(PORT, () => {
   console.log("Server listening on port 8000");
 });
 
