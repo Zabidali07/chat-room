@@ -5,9 +5,10 @@ const cors = require("cors");
 const routes = require("./server/routes/routes");
 const chatroomRoutes = require("./server/routes/chatroom");
 const app = express();
+const path = require("path");
 
 require("dotenv").config();
-const { NEW_DATABASE_URL, NODE_PORT } = process.env;
+const { DATABASE_URL, NODE_PORT, NODE_ENV } = process.env;
 
 const PORT = NODE_PORT || 8000;
 
@@ -20,11 +21,18 @@ app.use(
 
 app.use(cors());
 // app.use(express.static(path.join(__dirname, "/client/build"))); //neded to be changed
+app.use(express.static("client/build"));
 app.use("/api", routes);
 app.use("/api/chatroom", chatroomRoutes);
 
+if (NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname + "/client/build/index.html"));
+  });
+}
 mongoose
-  .connect(NEW_DATABASE_URL, {
+  .connect(DATABASE_URL, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
