@@ -31,23 +31,33 @@ const Login = ({ setupSocket }) => {
         password,
       })
       .then((response) => {
-        makeToast("success", response.data.message);
-        localStorage.setItem("CC_Token", response.data.token);
-
-        authenticate(response, () => {
+        if (response.data.error) {
+          makeToast("error", response.data.error);
           setFormInputs({
             ...formInputs,
             email: "",
             password: "",
             buttonText: "Login",
           });
-        });
-
-        if (isAuth()) {
-          history.push("/friends/openFriends");
-          setupSocket();
         } else {
-          history.push("/");
+          makeToast("success", response.data.message);
+          localStorage.setItem("CC_Token", response.data.token);
+
+          authenticate(response, () => {
+            setFormInputs({
+              ...formInputs,
+              email: "",
+              password: "",
+              buttonText: "Login",
+            });
+          });
+
+          if (isAuth()) {
+            history.push("/friends/openFriends");
+            setupSocket();
+          } else {
+            history.push("/");
+          }
         }
       })
       .catch((err) => {

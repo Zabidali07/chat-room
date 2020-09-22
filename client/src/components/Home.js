@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <div>
       <Layout />
-      <h2> WELCOME TO CHAT APP</h2>
+      <h2 className="make-center"> WELCOME TO CHAT BOX</h2>
     </div>
   );
 };

@@ -47,7 +47,7 @@ const Friends = ({ socket, match }) => {
   return (
     <div>
       <Layout />
-      <div className="list-container">
+      <div className="list-container make-center">
         {open === "openFriends" ? (
           friendList.length >= 1 ? (
             friendList.map((e) => (

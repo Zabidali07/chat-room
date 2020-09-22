@@ -27,8 +27,15 @@ const Signup = () => {
     // Avoid page refresh
     evt.preventDefault();
     if (password !== confirmPassword) {
-      var modal = document.getElementById("myModal");
-      modal.classList.remove("display-none");
+      makeToast("error", "password mismatch");
+      setFormInputs({
+        ...formInputs,
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        buttonText: "SignUp",
+      });
     } else {
       axios
         .post("/signup", {
@@ -37,8 +44,20 @@ const Signup = () => {
           password,
         })
         .then((response) => {
-          makeToast("success", response.data.message);
-          history.push("/login");
+          if (response.data.error) {
+            makeToast("error", response.data.error);
+            setFormInputs({
+              ...formInputs,
+              name: "",
+              email: "",
+              password: "",
+              confirmPassword: "",
+              buttonText: "SignUp",
+            });
+          } else {
+            makeToast("success", response.data.message);
+            history.push("/login");
+          }
         })
         .catch((err) => {
           // console.log(err);
