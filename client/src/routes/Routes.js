@@ -13,11 +13,14 @@ import Allusers from "../components/Allusers";
 
 const Routes = () => {
   const [socket, setSocket] = React.useState(null);
+  let url = process.env.REACT_APP_SERVER_URL;
+
+  let newUrl = url.substr(0, url.length - 4);
 
   const setupSocket = () => {
     const token = localStorage.getItem("CC_Token");
     if (token && !socket) {
-      const newSocket = io("http://localhost:8000", {
+      const newSocket = io(newUrl, {
         query: {
           token: localStorage.getItem("CC_Token"),
         },
